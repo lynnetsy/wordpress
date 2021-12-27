@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  wordpress:
+    container_name: 'wordpress'
+    image: wordpress:5.8.2-apache
+    restart: always
+    environment:
+    - WORDPRESS_DB_HOST=wp_mysql
+    - WORDPRESS_DB_USER=${DB_USER}
+    - WORDPRESS_DB_PASSWORD=${DB_PASSWORD}
+    - WORDPRESS_DB_NAME=${DB_NAME}
+    ports:
+    - 80:80
+    volumes:
+    - ./app:/var/www/html
+    networks:
+    - wpNet
+
+  
+  wp_mysql:
+    container_name: wp_mysql
+    image: mysql:8
+    restart: always
+    environment:
+    - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    - MYSQL_DATABASE=${DB_NAME}
+    - MYSQL_USER=${DB_USER}
+    - MYSQL_PASSWORD=${DB_PASSWORD}
+    ports:
+    - 3306:3306
+    volumes:
+    - wpDbVol:/var/lib/mysql
+    - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+    - wpNet
+      
+    
+networks:
+  wpNet:
+    driver: bridge
+
+volumes:
+  wpDbVol:
+    driver: local
+
