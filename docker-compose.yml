@@ -16,7 +16,7 @@ services:
     - ./docker/proxy/html:/usr/share/nginx/html
     - ./docker/proxy/dhparam:/etc/nginx/dhparam
     - ./docker/proxy/conf:/etc/nginx/conf.d
-    
+
   wordpress:
     container_name: 'wordpress'
     image: wordpress:5.8.2-apache
@@ -26,6 +26,7 @@ services:
     - WORDPRESS_DB_USER=${DB_USER}
     - WORDPRESS_DB_PASSWORD=${DB_PASSWORD}
     - WORDPRESS_DB_NAME=${DB_NAME}
+    - VIRTUAL_HOST=lynidev.com
     volumes:
     - ./app:/var/www/html
     networks:
