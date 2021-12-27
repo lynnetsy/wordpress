@@ -4,3 +4,6 @@ app/*
 docker/proxy/**
 !docker/proxy/*/
 !docker/proxy/*/.gitkeep
+docker/letsencrypt/**
+!docker/letsencrypt/*/
+!docker/letsencrypt/*/.gitkeep
