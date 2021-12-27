@@ -1,3 +1,6 @@
 .env
 app/*
 !app/.gitkeep
+docker/proxy/**
+!docker/proxy/*/
+!docker/proxy/*/.gitkeep

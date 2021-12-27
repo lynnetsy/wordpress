@@ -1,6 +1,22 @@
 version: '3.9'
 
 services:
+
+  proxy:
+    container_name: 'proxy'
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+    - 80:80
+    networks:
+    - wpNet
+    volumes:
+    - /var/run/docker.sock:/tmp/docker.sock:ro
+    - ./docker/proxy/vhost:/etc/nginx/vhost.d
+    - ./docker/proxy/html:/usr/share/nginx/html
+    - ./docker/proxy/dhparam:/etc/nginx/dhparam
+    - ./docker/proxy/conf:/etc/nginx/conf.d
+    
   wordpress:
     container_name: 'wordpress'
     image: wordpress:5.8.2-apache
@@ -10,8 +26,6 @@ services:
     - WORDPRESS_DB_USER=${DB_USER}
     - WORDPRESS_DB_PASSWORD=${DB_PASSWORD}
     - WORDPRESS_DB_NAME=${DB_NAME}
-    ports:
-    - 80:80
     volumes:
     - ./app:/var/www/html
     networks:
@@ -19,7 +33,7 @@ services:
 
   
   wp_mysql:
-    container_name: wp_mysql
+    container_name: 'wp_mysql'
     image: mysql:8
     restart: always
     environment:
