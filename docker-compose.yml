@@ -31,6 +31,20 @@ services:
     networks:
     - wpNet
 
+  nginx:
+    container_name: 'nginx'
+    image: nginx:alpine
+    restart: always
+    volumes:
+    - ./docker/nginx/conf:/etc/nginx/conf.d
+    environment:
+    - VIRTUAL_HOST=${WP_VHOST}
+    - LETSENCRYPT_HOST=${WP_VHOST}
+    - LETSENCRYPT_EMAIL=${WP_VHOST_EMAIL}    
+    networks:
+    - wpNet
+
+
   wordpress:
     container_name: 'wordpress'
     image: wordpress:5.8.2-apache
@@ -40,9 +54,6 @@ services:
     - WORDPRESS_DB_USER=${DB_USER}
     - WORDPRESS_DB_PASSWORD=${DB_PASSWORD}
     - WORDPRESS_DB_NAME=${DB_NAME}
-    - VIRTUAL_HOST=${WP_VHOST}
-    - LETSENCRYPT_HOST=${WP_VHOST}
-    - LETSENCRYPT_EMAIL=${WP_VHOST_EMAIL}
     volumes:
     - ./app:/var/www/html
     networks:
