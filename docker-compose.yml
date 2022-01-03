@@ -4,7 +4,7 @@ services:
 
   proxy:
     container_name: 'proxy'
-    image: jwilder/nginx-proxy
+    image: nginxproxy/nginx-proxy
     restart: always
     ports:
     - 80:80
@@ -13,17 +13,19 @@ services:
     - wpNet
     volumes:
     - /var/run/docker.sock:/tmp/docker.sock:ro
+    - ./docker/proxy/certs:/etc/nginx/certs
+    - ./docker/proxy/html:/usr/share/nginx/html
     - ./docker/proxy/vhost:/etc/nginx/vhost.d
-    - ./docker/proxy/dhparam:/etc/nginx/dhparam
     - ./docker/proxy/conf:/etc/nginx/conf.d
 
   letsencrypt:
     container_name: 'letsencrypt'
-    image: jrcs/letsencrypt-nginx-proxy-companion
+    image: nginxproxy/acme-companion
     restart: always
+    environment:
+    - DEFAULT_EMAIL: ${LETSENCRYPT_EMAIL}
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock:ro
-    - ./docker/letsencrypt/certs:/etc/nginx/certs:rw
     - ./docker/letsencrypt/acme:/etc/acme.sh
     volumes_from:
     - proxy:rw
@@ -40,6 +42,7 @@ services:
     - WORDPRESS_DB_PASSWORD=${DB_PASSWORD}
     - WORDPRESS_DB_NAME=${DB_NAME}
     - VIRTUAL_HOST=${WP_VHOST}
+    - VIRTUAL_PORT=${WP_VPORT}
     - LETSENCRYPT_HOST=${WP_VHOST}
     - LETSENCRYPT_EMAIL=${WP_VHOST_EMAIL}  
     volumes:
