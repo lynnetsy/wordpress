@@ -44,13 +44,13 @@ services:
     - VIRTUAL_HOST=${WP_VHOST}
     - VIRTUAL_PORT=${WP_VPORT}
     - LETSENCRYPT_HOST=${WP_VHOST}
-    - LETSENCRYPT_EMAIL=${WP_VHOST_EMAIL}  
+    - LETSENCRYPT_EMAIL=${WP_VHOST_EMAIL}
     volumes:
     - ./app:/var/www/html
     networks:
     - wpNet
 
-  
+
   wp_mysql:
     container_name: 'wp_mysql'
     image: mysql:8
@@ -67,8 +67,8 @@ services:
     - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
     networks:
     - wpNet
-      
-    
+
+
 networks:
   wpNet:
     driver: bridge
